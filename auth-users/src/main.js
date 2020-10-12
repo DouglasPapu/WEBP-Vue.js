@@ -5,6 +5,8 @@ import VueRouter from "vue-router";
 import store from "./store";
 import Home from "./components/Home"
 import User from "./components/User"
+import Dependency from "./components/Dependency"
+
 const routes = [
  {
     path: "/",
@@ -13,6 +15,10 @@ const routes = [
  {
   path: "/users",
   component: User,
+},
+{
+  path: "/dependency",
+  component: Dependency,
 },
 ];
 
