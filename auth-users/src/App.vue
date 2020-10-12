@@ -1,10 +1,16 @@
 <template>
-<v-app>
-    <NavBar></NavBar>
-    <div class="content">
-     <router-view></router-view>
-     </div>
-</v-app>
+ <v-app id="app">
+  <main>
+    <div class="app-container">
+    <header class="app-header">
+      <NavBar></NavBar>
+    </header>
+      <div class="content">
+         <router-view></router-view>
+      </div>
+    </div>
+  </main>
+  </v-app>
 </template>
 
 <script>
@@ -27,13 +33,6 @@ export default {
   margin-top: 60px;
 }
 
-.home-bg{
 
-background-image: url("https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=749&q=80");
-background-repeat: no-repeat;
-background-size: cover;
-background-attachment: fixed;
-background-position: center;
-}
 
 </style>
