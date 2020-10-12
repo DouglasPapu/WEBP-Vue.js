@@ -4,11 +4,16 @@ import vuetify from "./plugins/vuetify";
 import VueRouter from "vue-router";
 import store from "./store";
 import Home from "./components/Home"
+import User from "./components/User"
 const routes = [
  {
     path: "/",
     component: Home,
  },
+ {
+  path: "/users",
+  component: User,
+},
 ];
 
 

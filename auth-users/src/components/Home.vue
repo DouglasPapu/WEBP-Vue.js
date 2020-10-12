@@ -15,10 +15,10 @@
              </v-card-text>
              <v-divider></v-divider>
              <v-card-actions class="justify-center">
-                 <v-btn color="primary" class="">Login</v-btn>
+                 <v-btn color="primary" class=""><v-icon left>login</v-icon>Login</v-btn>
              </v-card-actions>
               <v-card-actions class="justify-center">
-                 <v-btn text>Register</v-btn>
+                 <v-btn to="/users" text>Register</v-btn>
              </v-card-actions>
          </v-card>
      </v-content>
