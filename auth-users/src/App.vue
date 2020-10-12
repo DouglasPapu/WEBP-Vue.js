@@ -1,15 +1,18 @@
 <template>
 <v-app>
-    <Home></Home>
+    <NavBar></NavBar>
+    <div class="content">
+     <router-view></router-view>
+     </div>
 </v-app>
 </template>
 
 <script>
-import Home from "./components/Home"
+import NavBar from "./components/NavBar"
 export default {
   name: 'App',
   components: {
-    Home,
+    NavBar,
   }
 }
 </script>
@@ -23,4 +26,14 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.home-bg{
+
+background-image: url("https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=749&q=80");
+background-repeat: no-repeat;
+background-size: cover;
+background-attachment: fixed;
+background-position: center;
+}
+
 </style>

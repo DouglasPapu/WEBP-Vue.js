@@ -1,6 +1,5 @@
 <template>
  <div>
-     <NavBar></NavBar>
      <v-content>
          <v-card width="500" flat class="mx-auto mt-9 text-center">
              <v-card-title class="">Login</v-card-title>
@@ -23,7 +22,6 @@
 </template>
 
 <script>
-import NavBar from "./NavBar"
 export default {
 data(){
     return {
@@ -31,11 +29,11 @@ data(){
     }
 },
 components: {
-    NavBar,
 }
 }
 </script>
 
 <style>
+
 
 </style>

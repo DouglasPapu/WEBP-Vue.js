@@ -13,8 +13,8 @@
  </v-toolbar-title>
   <v-spacer></v-spacer>
   <v-btn to="/" text rounded>Home</v-btn>
-  <v-btn text rounded>Add User</v-btn>
-  <v-btn text rounded>Add Dependency</v-btn>
+  <v-btn to="/users" text rounded>Add User</v-btn>
+  <v-btn to="/dependencies" text rounded>Add Dependency</v-btn>
   </v-app-bar>
 </div>
 </template>
