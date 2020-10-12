@@ -3,12 +3,12 @@ import App from './App.vue'
 import vuetify from "./plugins/vuetify";
 import VueRouter from "vue-router";
 import store from "./store";
-import HelloWorld from "./components/HelloWorld"
+import Home from "./components/Home"
 const routes = [
-  {
+ {
     path: "/",
-    component: HelloWorld,
-  },
+    component: Home,
+ },
 ];
 
 
