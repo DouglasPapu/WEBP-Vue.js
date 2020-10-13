@@ -6,18 +6,18 @@
   <v-container>
       <v-row>
           <v-col cols="12" md="6">
-              <v-text-field required label="Name" :rules="nameRules" prepend-icon="perm_identity"/>
+              <v-text-field v-model="user.name" required label="Name" :rules="nameRules" prepend-icon="perm_identity"/>
           </v-col>
           <v-col cols="12" md="6">
-              <v-text-field required :rules="lastNameRules" label="Lastname" prepend-icon="person_outline"/>
+              <v-text-field v-model="user.lastname" required :rules="lastNameRules" label="Lastname" prepend-icon="person_outline"/>
           </v-col>
       </v-row>
       <v-row>
           <v-col cols="12" md="6">
-              <v-text-field required :rules="emailRules" label="Email" prepend-icon="account_circle"/>
+              <v-text-field v-model="user.email" required :rules="emailRules" label="Email" prepend-icon="account_circle"/>
           </v-col>
           <v-col cols="12" md="6">
-              <v-text-field required :rules="passwordRules" label="Password" prepend-icon="vpn_key"/>
+              <v-text-field v-model="user.password" required :rules="passwordRules" label="Password" prepend-icon="vpn_key"/>
           </v-col>
       </v-row>
         <v-row>
@@ -27,7 +27,7 @@
         v-model="menu1"
         :close-on-content-click="false"
         :nudge-right="40"
-        :return-value.sync="initDate"
+        :return-value.sync="user.initDate"
         lazy
         transition="scale-transition"
         offset-y
@@ -37,17 +37,17 @@
         <template v-slot:activator="{ on }">
           <v-text-field
             :rules="dateRules"
-            v-model="initDate"
+            v-model="user.initDate"
             label="Initial Date"
             prepend-icon="event"
             readonly
             v-on="on"
           ></v-text-field>
         </template>
-        <v-date-picker :rules="dateRules" v-model="initDate" no-title scrollable>
+        <v-date-picker :rules="dateRules" v-model="user.initDate" no-title scrollable>
           <v-spacer></v-spacer>
           <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
-          <v-btn flat color="primary" @click="$refs.menu1.save(initDate)">OK</v-btn>
+          <v-btn flat color="primary" @click="$refs.menu1.save(user.initDate)">OK</v-btn>
         </v-date-picker>
       </v-menu>
     </v-col>
@@ -58,7 +58,7 @@
         v-model="menu2"
         :close-on-content-click="false"
         :nudge-right="40"
-        :return-value.sync="finalDate"
+        :return-value.sync="user.finalDate"
         lazy
         transition="scale-transition"
         offset-y
@@ -68,17 +68,17 @@
         <template v-slot:activator="{ on }">
           <v-text-field
             :rules="dateRules"
-            v-model="finalDate"
+            v-model="user.finalDate"
             label="Final Date"
             prepend-icon="event"
             readonly
             v-on="on"
           ></v-text-field>
         </template>
-        <v-date-picker :rules="dateRules" v-model="finalDate" no-title scrollable>
+        <v-date-picker :rules="dateRules" v-model="user.finalDate" no-title scrollable>
           <v-spacer></v-spacer>
           <v-btn flat color="primary" @click="menu2 = false">Cancel</v-btn>
-          <v-btn flat color="primary" @click="$refs.menu2.save(finalDate)">OK</v-btn>
+          <v-btn flat color="primary" @click="$refs.menu2.save(user.finalDate)">OK</v-btn>
         </v-date-picker>
       </v-menu>
         </v-col>
@@ -87,8 +87,7 @@
     <v-row>
         <v-col cols="12" md="6">
             <v-select
-          v-model="e1"
-          :items="dependencies"
+          v-model="user.dependency"
           menu-props="auto"
           label="Dependency"
           hide-details
@@ -100,10 +99,10 @@
 
         <v-col cols="12" md="6">
             <v-switch
-              v-model="ex11"
+              v-model="user.active"
               label="Active"
               color="success"
-              value="success"
+              :value="user.active"
               prepend-icon="check_circle"
               hide-details
             ></v-switch>
@@ -111,7 +110,7 @@
     </v-row>
     <v-row>
         <v-col>
-            <v-btn class="primary">Resgiter</v-btn>
+            <v-btn class="primary" @click="addToUsers">Register</v-btn>
         </v-col>
     </v-row>
   </v-container>
@@ -123,10 +122,18 @@
 export default {
  data(){
      return {
+        user: {
+                name: "",
+                lastname: "",
+                email: "",
+                password: "",
+                initDate: null,
+                finalDate: null,
+                dependency: "",
+                active: false,
+        },
          menu1: false,
          menu2: false,
-         initDate: null,
-         finalDate: null,
          nameRules: [
              (name) => !!name || "Name is required",
              (name) => name.length >= 3 || "Name must be at least 3 characters"
@@ -151,9 +158,26 @@ export default {
          dependencyRules: [
            (dependency) => !!dependency || "Dependency is required",
        ],
-
      }
- }
+   },
+   methods: {
+      refresh(){
+        this.user = {
+           name: "",
+           lastname: "",
+           email: "",
+           password: "",
+           initDate: null,
+           finalDate: null,
+           dependency: "",
+           active: false,
+        }
+      },
+      addToUsers(){
+        this.$store.dispatch("addToUsers", this.user);
+        this.refresh();
+      },
+   },
 }
 </script>
 

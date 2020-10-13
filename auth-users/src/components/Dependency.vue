@@ -6,20 +6,20 @@
   <v-container>
       <v-row>
           <v-col cols="12" md="6">
-              <v-text-field required :rules="nameRules" label="Name" prepend-icon="perm_identity"/>
+              <v-text-field v-model="name" required :rules="nameRules" label="Name" prepend-icon="perm_identity"/>
           </v-col>
           <v-col cols="12" md="6">
-              <v-text-field required :rules="coordinatorRules" label="Coordinator" prepend-icon="record_voice_over"/>
+              <v-text-field v-model="coordinator" required :rules="coordinatorRules" label="Coordinator" prepend-icon="record_voice_over"/>
           </v-col>
       </v-row>
       <v-row>                 
           <v-col cols="12" md="6">
-              <v-text-field required :rules="locationRules" v-model="location" label="Location" prepend-icon="location_on"/>
+              <v-text-field  v-model="location" required :rules="locationRules" label="Location" prepend-icon="location_on"/>
           </v-col>
 
            <v-col cols="12" md="6">
             <v-switch
-              v-model="ex11"
+              v-model="active"
               label="Active"
               color="success"
               value="success"
@@ -34,7 +34,7 @@
         <v-col cols="12" md="6">
             <v-subheader>Max Users</v-subheader>
               <v-slider
-                v-model="sliderUser"
+                v-model="amountUsers"
                 max="200"
                 prepend-icon="add_circle_outline"
                 :rules="usersRules"
@@ -56,6 +56,11 @@
 export default {
     data(){
         return {
+            name: "",
+            coordinator: "",
+            location: "",
+            active:"",
+            amountUsers: 0,
             nameRules: [
              (name) => !!name || "Name is required",
              (name) => name.length >= 3 || "Name must be at least 3 characters"
@@ -68,7 +73,7 @@ export default {
              (location) => !!location || "location is required",
             ],
              usersRules: [
-             (user) => !!user || "Users is required. Must be at least 1",
+             (user) => !!user || "Users are required. Must be at least 1",
             ],
         }
     }
