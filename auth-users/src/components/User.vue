@@ -90,6 +90,7 @@
           v-model="user.dependency"
           menu-props="auto"
           label="Dependency"
+          :items="dependencies"
           hide-details
           prepend-icon="touch_app"
           :rules="dependencyRules"
@@ -160,6 +161,11 @@ export default {
        ],
      }
    },
+   computed: {
+        dependencies(){
+          return this.$store.state.dependencies;
+        }
+    },
    methods: {
       refresh(){
         this.user = {
