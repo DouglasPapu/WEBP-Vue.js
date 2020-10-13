@@ -22,37 +22,65 @@
       </v-row>
         <v-row>
          <v-col cols="12" md="6">
-             <v-dialog  ref="dialog" v-model="date1" :return-value.sync="dateInit" persistent width="290px" >
-                <template v-slot:activator="{ on, attrs }">
-                <v-text-field :rules="dateRules" required v-model="dateInit" label="Init Date"  prepend-icon="book_online"  readonly v-bind="attrs" v-on="on"></v-text-field>
-                </template>
-                <v-date-picker  v-model="dateInit" scrollable locale="es-419" >
-                <v-spacer></v-spacer>
-                <v-btn  text color="primary" @click="modal1 = false">
-                        Cancel
-                </v-btn>
-                <v-btn text color="primary" @click="$refs.dialog.save(dateInit)" >
-                OK
-                </v-btn>
-                </v-date-picker>
-            </v-dialog>
-         </v-col>
+    <v-menu
+        ref="menu1"
+        v-model="menu1"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        :return-value.sync="initDate"
+        lazy
+        transition="scale-transition"
+        offset-y
+        full-width
+        min-width="290px"
+      >
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            :rules="dateRules"
+            v-model="initDate"
+            label="Initial Date"
+            prepend-icon="event"
+            readonly
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker :rules="dateRules" v-model="initDate" no-title scrollable>
+          <v-spacer></v-spacer>
+          <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
+          <v-btn flat color="primary" @click="$refs.menu1.save(initDate)">OK</v-btn>
+        </v-date-picker>
+      </v-menu>
+    </v-col>
 
-        <v-col cols="12" md="6">
-            <v-dialog  ref="dialog" v-model="date1" :return-value.sync="dateInit" persistent width="290px" >
-                <template v-slot:activator="{ on, attrs }">
-                <v-text-field required :rules="dateRules" v-model="dateInit" label="Final Date"  prepend-icon="book_online"  readonly v-bind="attrs" v-on="on"></v-text-field>
-                </template>
-                <v-date-picker  v-model="dateInit" scrollable locale="es-419" >
-                <v-spacer></v-spacer>
-                <v-btn  text color="primary" @click="modal1 = false">
-                        Cancel
-                </v-btn>
-                <v-btn text color="primary" @click="$refs.dialog.save(dateInit)" >
-                OK
-                </v-btn>
-                </v-date-picker>
-            </v-dialog>
+  <v-col cols="12" md="6">
+     <v-menu
+        ref="menu2"
+        v-model="menu2"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        :return-value.sync="finalDate"
+        lazy
+        transition="scale-transition"
+        offset-y
+        full-width
+        min-width="290px"
+      >
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            :rules="dateRules"
+            v-model="finalDate"
+            label="Final Date"
+            prepend-icon="event"
+            readonly
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker :rules="dateRules" v-model="finalDate" no-title scrollable>
+          <v-spacer></v-spacer>
+          <v-btn flat color="primary" @click="menu2 = false">Cancel</v-btn>
+          <v-btn flat color="primary" @click="$refs.menu2.save(finalDate)">OK</v-btn>
+        </v-date-picker>
+      </v-menu>
         </v-col>
       </v-row>
 
@@ -95,6 +123,10 @@
 export default {
  data(){
      return {
+         menu1: false,
+         menu2: false,
+         initDate: null,
+         finalDate: null,
          nameRules: [
              (name) => !!name || "Name is required",
              (name) => name.length >= 3 || "Name must be at least 3 characters"
