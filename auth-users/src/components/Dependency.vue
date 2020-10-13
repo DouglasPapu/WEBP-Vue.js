@@ -6,15 +6,15 @@
   <v-container>
       <v-row>
           <v-col cols="12" md="6">
-              <v-text-field required label="Name" prepend-icon="perm_identity"/>
+              <v-text-field required :rules="nameRules" label="Name" prepend-icon="perm_identity"/>
           </v-col>
           <v-col cols="12" md="6">
-              <v-text-field required label="Coordinator" prepend-icon="record_voice_over"/>
+              <v-text-field required :rules="coordinatorRules" label="Coordinator" prepend-icon="record_voice_over"/>
           </v-col>
       </v-row>
       <v-row>                 
           <v-col cols="12" md="6">
-              <v-text-field v-model="location" required label="Location" prepend-icon="location_on"/>
+              <v-text-field required :rules="locationRules" v-model="location" label="Location" prepend-icon="location_on"/>
           </v-col>
 
            <v-col cols="12" md="6">
@@ -37,6 +37,7 @@
                 v-model="sliderUser"
                 max="200"
                 prepend-icon="add_circle_outline"
+                :rules="usersRules"
                 thumb-label
             ></v-slider>
          </v-col>      
@@ -53,7 +54,24 @@
 
 <script>
 export default {
-
+    data(){
+        return {
+            nameRules: [
+             (name) => !!name || "Name is required",
+             (name) => name.length >= 3 || "Name must be at least 3 characters"
+            ],
+            coordinatorRules: [
+             (coordinator) => !!coordinator || "Coordinator is required",
+            (coordinator) => coordinator.length >= 3 || "Coordinator must be at least 3 characters"
+            ],
+            locationRules: [        
+             (location) => !!location || "location is required",
+            ],
+             usersRules: [
+             (user) => !!user || "Users is required. Must be at least 1",
+            ],
+        }
+    }
 }
 </script>
 
