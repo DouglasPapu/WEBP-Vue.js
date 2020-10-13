@@ -1,11 +1,13 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
+import App from './App.vue';
 import vuetify from "./plugins/vuetify";
 import VueRouter from "vue-router";
 import store from "./store";
-import Home from "./components/Home"
-import User from "./components/User"
-import Dependency from "./components/Dependency"
+import Home from "./components/Home";
+import User from "./components/User";
+import Dependency from "./components/Dependency";
+import Dependencies from "./components/Dependencies";
+import Users from "./components/Users";
 import firebase from "firebase/app";
 import "firebase/firestore";
 
@@ -15,13 +17,21 @@ const routes = [
     component: Home,
  },
  {
-  path: "/users",
+  path: "/user",
   component: User,
 },
 {
   path: "/dependency",
   component: Dependency,
 },
+{
+  path: "/dependencies",
+  component: Dependencies,
+},
+{
+  path: "/users",
+  component: Users
+}
 ];
 
 const firebaseConfig = {
