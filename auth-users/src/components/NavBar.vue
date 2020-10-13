@@ -6,7 +6,7 @@
   dark
   >
   <v-toolbar-title>
-    <v-btn text rounded outline>
+    <v-btn text rounded outlined>
       <v-icon left>home</v-icon>
       JD Login
     </v-btn>

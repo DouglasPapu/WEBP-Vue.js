@@ -1,6 +1,6 @@
 <template>
  <div>
-     <v-content wrap>
+     <v-main wrap>
          <v-card width="500" shaped elevation="17" flat class="mx-auto mt-9">
              <v-card-title class="justify-center">Join Free</v-card-title>
              <v-card-subtitle class="justify-center">welcome</v-card-subtitle>
@@ -23,7 +23,7 @@
                  <v-btn to="/users" text>Register</v-btn>
              </v-card-actions>
          </v-card>
-     </v-content>
+     </v-main>
  </div>
 </template>
 
