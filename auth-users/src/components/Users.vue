@@ -15,16 +15,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in users" :key="item.name">
+          <tr v-for="(item, index) in users" :key="index">
             <td>{{ item.name }}</td>
-            <td>{{ item.lastName }}</td>
+            <td>{{ item.lastname }}</td>
             <td>{{ item.email }}</td>
-            <td>{{ item.initialDate }}</td>
+            <td>{{ item.initDate }}</td>
             <td>{{ item.finalDate }}</td>
             <td>{{ item.dependency }}</td>
             <td>{{ item.active }}</td>
             <td>
-              <v-icon>edit</v-icon><v-icon>delete</v-icon>
+              <v-icon>edit</v-icon> <v-icon>delete</v-icon>
             </td>
           </tr>
         </tbody>
@@ -37,27 +37,13 @@
 export default {
   data() {
     return {
-      users: [
-        {
-          name: 'Carlos',
-          lastName: 'Perez',
-          email: 'carperez@gmail.com',
-          initialDate: '2020-10-13',
-          finalDate: '2020-10-21',
-          dependency: 'Felipe',
-          active: true,
-        },
-        {
-          name: 'Felipe',
-          lastName: 'Martinez',
-          email: 'femartinez@gmail.com',
-          initialDate: '2020-10-13',
-          finalDate: '2020-10-21',
-          dependency: 'Carlos',
-          active: true,
-        },
-      ],
-    };
+
+    }
+  },
+   computed:{
+      users(){
+          return this.$store.state.users;
+      }
   },
 };
 </script>

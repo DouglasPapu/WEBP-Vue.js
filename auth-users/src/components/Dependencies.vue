@@ -13,13 +13,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in dependencies" :key="item.name">
+          <tr v-for="(item,index) in dependencies" :key="index">
             <td>{{ item.name }}</td>
             <td>{{ item.coordinator }}</td>
             <td>{{ item.location }}</td>
             <td>{{ item.active }}</td>
-            <td>{{ item.maxUsers }}</td>
-            <td><v-icon>edit</v-icon><v-icon>delete</v-icon></td>
+            <td>{{ item.amountUsers }}</td>
+            <td><v-icon>edit</v-icon> <v-icon>delete</v-icon></td>
           </tr>
         </tbody>
       </template>
@@ -31,23 +31,13 @@
 export default {
   data() {
     return {
-      dependencies: [
-        {
-          name: "Carlos",
-          coordinator: "prueba",
-          location: "nada",
-          active: true,
-          maxUsers: 20,
-        },
-        {
-          name: "Felipe",
-          coordinator: "prueba2",
-          location: "nada",
-          active: false,
-          maxUsers: 47,
-        },
-      ],
+
     };
+  },
+   computed:{
+      dependencies(){
+          return this.$store.state.dependencies;
+      }
   },
 };
 </script>

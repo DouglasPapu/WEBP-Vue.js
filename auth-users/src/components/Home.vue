@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import {db} from "../main"
 export default {
 data(){
     return {
@@ -48,19 +47,6 @@ data(){
        ],
     }
 },
- created(){
-        db.collection("dependencies").get().then((dep) => {
-           dep.forEach(doc => {
-             this.$store.state.dependencies.push(doc.data());
-           })
-        });
-        
-        db.collection("users").get().then((usr) => {
-           usr.forEach(doc => {
-             this.$store.state.users.push(doc.data());
-           })
-        });      
-    },
 }
 </script>
 
