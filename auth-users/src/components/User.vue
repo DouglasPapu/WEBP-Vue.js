@@ -46,8 +46,8 @@
         </template>
         <v-date-picker :rules="dateRules" v-model="user.initDate" no-title scrollable>
           <v-spacer></v-spacer>
-          <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
-          <v-btn flat color="primary" @click="$refs.menu1.save(user.initDate)">OK</v-btn>
+          <v-btn color="primary" @click="menu1 = false">Cancel</v-btn>
+          <v-btn color="primary" @click="$refs.menu1.save(user.initDate)">OK</v-btn>
         </v-date-picker>
       </v-menu>
     </v-col>
@@ -77,8 +77,8 @@
         </template>
         <v-date-picker :rules="dateRules" v-model="user.finalDate" no-title scrollable>
           <v-spacer></v-spacer>
-          <v-btn flat color="primary" @click="menu2 = false">Cancel</v-btn>
-          <v-btn flat color="primary" @click="$refs.menu2.save(user.finalDate)">OK</v-btn>
+          <v-btn color="primary" @click="menu2 = false">Cancel</v-btn>
+          <v-btn color="primary" @click="$refs.menu2.save(user.finalDate)">OK</v-btn>
         </v-date-picker>
       </v-menu>
         </v-col>
