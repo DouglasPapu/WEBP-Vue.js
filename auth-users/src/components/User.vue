@@ -122,6 +122,7 @@
 </template>
 
 <script>
+import md5 from "js-md5";
 export default {
  data(){
      return {
@@ -184,6 +185,7 @@ export default {
         }
       },
       addToUsers(){
+        this.user.password = md5(this.user.password);
         this.$store.dispatch("addToUsers", this.user);
         this.refresh();
       },
