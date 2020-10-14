@@ -2,7 +2,7 @@
 <v-card width="500" shaped elevation="17" class="mx-auto mt-9">
      <v-card-title class="justify-center">Sign Up</v-card-title>
      <v-card-subtitle class="justify-center">Register a new dependecy</v-card-subtitle>
- <v-form v-model="valid">
+ <v-form>
   <v-container>
       <v-row>
           <v-col cols="12" md="6">
@@ -57,12 +57,14 @@ export default {
     data(){
         return {
             dependency: {
+                id: 0,
                 name: "",
                 coordinator: "",
                 location: "",
                 active:"",
                 amountUsers: 0,
             },
+            dialog: false,
             nameRules: [
              (name) => !!name || "Name is required",
              (name) => name.length >= 3 || "Name must be at least 3 characters"
@@ -82,6 +84,7 @@ export default {
     methods: {
         refresh(){
             this.dependency = {
+                id:0,
                 name: "",
                 coordinator: "",
                 location: "",

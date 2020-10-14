@@ -5,9 +5,10 @@
              <v-card-title class="justify-center">Join Free</v-card-title>
              <v-card-subtitle class="justify-center">welcome</v-card-subtitle>
              <v-card-text>
-                 <v-text-field required label="Email" :rules="emailRules" prepend-icon="account_circle"/>
+                 <v-text-field required v-model="email" label="Email" :rules="emailRules" prepend-icon="account_circle"/>
                  <v-text-field 
                  label="Password" 
+                 v-model="password"
                  :type="showPassword ? 'text' : 'password'"
                  prepend-icon="lock" 
                  :append-icon="showPassword ? 'visibility' : 'visibility_off'" 
@@ -28,10 +29,13 @@
 </template>
 
 <script>
+import {db} from "../main"
 export default {
 data(){
     return {
         showPassword:false,
+        email: "",
+        password: "",
         emailRules: [
         (email) => !!email || "Email is required.",
         (email) =>
@@ -44,8 +48,19 @@ data(){
        ],
     }
 },
-components: {
-}
+ created(){
+        db.collection("dependencies").get().then((dep) => {
+           dep.forEach(doc => {
+             this.$store.state.dependencies.push(doc.data());
+           })
+        });
+        
+        db.collection("users").get().then((usr) => {
+           usr.forEach(doc => {
+             this.$store.state.users.push(doc.data());
+           })
+        });      
+    },
 }
 </script>
 

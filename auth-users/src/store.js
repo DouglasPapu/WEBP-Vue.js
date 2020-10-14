@@ -12,19 +12,16 @@ export default new Vuex.Store({
     mutations: {
         addToUsers(state,payload){
             try{
+                payload.id=((state.users.length) - 1) + 1;
                 state.users.push(payload);
                 db.collection('users').add(payload);
-              // const snapshot = await db.collection('users').get();
-    
-               // snapshot.forEach(user => {
-               //     console.log(user.data());
-               //})
             }catch(error){
                 console.log(error);
             }
         },
         addToDependencies(state,payload){
             try{
+                payload.id=((state.dependencies.length) - 1) + 1;
                 state.dependencies.push(payload);
                 db.collection('dependencies').add(payload);
             }catch(error){

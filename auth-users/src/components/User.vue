@@ -2,7 +2,7 @@
  <v-card width="500" shaped elevation="17" class="mx-auto mt-9">
      <v-card-title class="justify-center">Sign Up</v-card-title>
      <v-card-subtitle class="justify-center">Register a new user</v-card-subtitle>
- <v-form v-model="valid">
+ <v-form>
   <v-container>
       <v-row>
           <v-col cols="12" md="6">
@@ -86,11 +86,13 @@
 
     <v-row>
         <v-col cols="12" md="6">
-            <v-select
+        <v-select 
           v-model="user.dependency"
           menu-props="auto"
           label="Dependency"
           :items="dependencies"
+          item-text="name"
+          item-value="id"
           hide-details
           prepend-icon="touch_app"
           :rules="dependencyRules"
@@ -124,6 +126,7 @@ export default {
  data(){
      return {
         user: {
+                id: 0,
                 name: "",
                 lastname: "",
                 email: "",
@@ -169,6 +172,7 @@ export default {
    methods: {
       refresh(){
         this.user = {
+           id: 0,
            name: "",
            lastname: "",
            email: "",
