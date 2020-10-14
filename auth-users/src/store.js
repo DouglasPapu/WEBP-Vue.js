@@ -15,6 +15,13 @@ export default new Vuex.Store({
                 payload.id=((state.users.length) - 1) + 1;
                 state.users.push(payload);
                 db.collection('users').add(payload);
+
+                db.collection("dependencies").get().then((dep) => {
+                    dep.forEach(doc => {
+                      
+                    })
+                 });
+
             }catch(error){
                 console.log(error);
             }

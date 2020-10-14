@@ -59,6 +59,7 @@ export default {
             dependency: {
                 id: 0,
                 name: "",
+                users: [],
                 coordinator: "",
                 location: "",
                 active:"",
