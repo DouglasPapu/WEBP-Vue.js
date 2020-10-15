@@ -46,6 +46,41 @@ export default new Vuex.Store({
                 console.log(error);
             }
         },
+        deleteUsers(state, payload){
+            try{
+                /* Methods delete a specific user and remove him from all linked dependecies */
+                state.users.splice(payload,1);
+                state.dependencies.forEach(dep => {
+                     if(dep.users.includes(payload)){
+                        dep.users.splice(payload, 1);
+                     }
+                });
+                /* Code that delete a user from firebase */
+                db.collection("users").get().then(usr => {
+                    usr.forEach(doc => {
+                         if(doc.data().id === payload.id){
+                            db.collection("users").doc(doc.id).delete();
+                         }
+                    });
+                });
+                /* Searching dependencies with linked users to remove him */
+                db.collection("dependencies").get().then(dep => {
+                    dep.forEach(doc => {
+                        doc.data().users.forEach(usr => {
+                            if(usr.id === payload.id){
+                                  db.collection("dependencies").doc(doc.id).update({
+                                      users: firebase.firestore.FieldValue.arrayRemove(payload)
+                                  });               
+                           }
+                        });                       
+                    });
+                });
+
+
+            }catch(error){
+                console.log(error);
+            }
+        },
     },
     actions: {
          addToUsers({commit}, payload){
@@ -53,6 +88,9 @@ export default new Vuex.Store({
          },
          addToDependencies({commit}, payload){
             commit("addToDependencies", payload);
-         }
+         },
+         deleteUsers({commit}, payload){
+            commit("deleteUsers", payload);
+         },
     },
 });
