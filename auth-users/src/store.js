@@ -46,6 +46,40 @@ export default new Vuex.Store({
                 console.log(error);
             }
         },
+        editUsers(state, payload){
+            db.collection("users").get().then(usr => {
+                usr.forEach(doc => {
+                    if(doc.data().id === payload.id){
+                        db.collection("users").doc(doc.id).update(payload);
+                        }
+                  });
+            });
+            /* Section to update dependecies with the same user*/
+            db.collection("dependencies").get().then(dep => {
+                    dep.forEach(doc => {
+                        doc.data().users.forEach(usr => {
+                            if(usr.id === payload.id){
+                              db.collection("dependencies").doc(doc.id) //Falta completar
+                          }
+                        });                       
+                    });
+                });
+
+               /* Section to update a specific user at store */
+                 let userNew = state.users.find(usr => usr.id === payload.id);
+                 let index = state.users.indexOf(userNew);
+                 state.users[index] = payload;
+
+                 state.dependencies.forEach(dep => {
+                     if(dep.users.includes(payload)){
+                        let userNewTwo = dep.users.find(usr => usr.id === payload.id);
+                        let index = dep.users.indexOf(userNewTwo);
+                        dep.users[index] = payload;
+                     }
+                });
+
+
+        },
         deleteUsers(state, payload){
             try{
                 /* Code that delete a user from firebase */
