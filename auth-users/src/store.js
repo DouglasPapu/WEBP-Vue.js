@@ -47,38 +47,54 @@ export default new Vuex.Store({
             }
         },
         editUsers(state, payload){
-            db.collection("users").get().then(usr => {
-                usr.forEach(doc => {
-                    if(doc.data().id === payload.id){
-                        db.collection("users").doc(doc.id).update(payload);
-                        }
-                  });
-            });
-            /* Section to update dependecies with the same user*/
-            db.collection("dependencies").get().then(dep => {
-                    dep.forEach(doc => {
-                        doc.data().users.forEach(usr => {
-                            if(usr.id === payload.id){
-                              db.collection("dependencies").doc(doc.id) //Falta completar
-                          }
-                        });                       
-                    });
-                });
-
                /* Section to update a specific user at store */
                  let userNew = state.users.find(usr => usr.id === payload.id);
-                 let index = state.users.indexOf(userNew);
-                 state.users[index] = payload;
 
-                 state.dependencies.forEach(dep => {
-                     if(dep.users.includes(payload)){
-                        let userNewTwo = dep.users.find(usr => usr.id === payload.id);
-                        let index = dep.users.indexOf(userNewTwo);
-                        dep.users[index] = payload;
-                     }
+                 if(payload.dependency === userNew.dependency){
+                     let index = state.users.indexOf(userNew);
+                     state.users[index] = payload;
+                     
+                     state.dependencies.forEach(dep => {
+                        dep.users.forEach((usr, index) => {
+                            if(payload.id === usr.id){
+                                 dep.users[index] = payload;
+                            }
+                        });
+                  });
+                 }else{
+
+                        state.dependencies.forEach(dep => {
+                             if(dep.id === userNew.dependency){
+                                 dep.users.splice(userNew, 1);
+                             }
+                        });
+                         let index = state.users.indexOf(userNew);
+                         state.users[index] = payload;
+
+                        state.dependencies.forEach(dep => {
+                             if(dep.id === payload.dependency){
+                                dep.users.push(payload);
+                             }
+                        });
+                 }
+                 this.state.users.forEach(usr => {
+                db.collection("users").get().then(us => {
+                     us.forEach(doc => {
+                         if(usr.id === doc.data().id){
+                             db.collection("users").doc(doc.id).update(usr);
+                         }
+                     });
                 });
-
-
+            });
+            this.state.dependencies.forEach(dep => {
+                db.collection("dependencies").get().then(us => {
+                     us.forEach(doc => {
+                         if(dep.id === doc.data().id){
+                             db.collection("dependencies").doc(doc.id).update(dep);
+                         }
+                     });
+                });
+            });
         },
         deleteUsers(state, payload){
             try{
@@ -129,6 +145,9 @@ export default new Vuex.Store({
          },
          deleteUsers({commit}, payload){
             commit("deleteUsers", payload);
+         },
+         editUsers({commit}, payload){
+            commit("editUsers", payload);
          },
     },
 });
