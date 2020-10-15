@@ -158,7 +158,6 @@
 </template>
 
 <script>
-import md5 from "js-md5";
 export default {
   data() {
     return {
@@ -221,7 +220,9 @@ export default {
       };
     },
     addToUsers() {
-      this.user.password = md5(this.user.password);
+      var CryptoJS = require('crypto-js');
+      var ciphertext = CryptoJS.AES.encrypt(this.user.password, 'secret key 123').toString();
+      this.user.password = ciphertext;
       this.$store.dispatch("addToUsers", this.user);
       this.refresh();
     },

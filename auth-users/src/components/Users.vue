@@ -311,6 +311,10 @@ export default {
     viewEdit(item) {
       this.dialogEdit = true;
       this.itemEdit = Object.assign({}, item);
+      var CryptoJS = require('crypto-js');
+      var bytes = CryptoJS.AES.decrypt(this.itemEdit.password, 'secret key 123');
+      var originaltext = bytes.toString(CryptoJS.enc.Utf8);
+      this.itemEdit.password = originaltext;
     },
     editUsers(payload) {
       this.$store.dispatch("editUsers", payload);

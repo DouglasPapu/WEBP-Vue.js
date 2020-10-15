@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "crypto-js": "^4.0.0",
     "firebase": "^7.23.0",
     "js-md5": "^0.7.3",
     "vue": "^2.6.11",
