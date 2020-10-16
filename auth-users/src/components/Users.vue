@@ -30,7 +30,9 @@
             <td>{{ item.email }}</td>
             <td>{{ item.initDate }}</td>
             <td>{{ item.finalDate }}</td>
-            <td>{{ item.dependency }}</td>
+            <td>
+              {{ dependencies.find((dep) => dep.id === item.dependency).name }}
+            </td>
             <td>
               <v-icon :color="item.active ? 'green darken-2' : 'red'">{{
                 item.active ? "how_to_reg" : "unpublished"
@@ -81,7 +83,7 @@
         <v-dialog v-model="dialogEdit" max-width="500px">
           <v-card shaped elevation="17">
             <v-card-title class="headline justify-center"
-              >Edit to {{ itemEdit.name }}</v-card-title
+              >Edit an user</v-card-title
             >
             <v-form>
               <v-container>
@@ -245,6 +247,19 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <!-- Dialog to show success change! -->
+        <v-dialog v-model="dialogSuccess" max-width="500px">
+          <v-card>
+            <v-card-title class="headline">Successful operation!</v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="dialogSuccess = false"
+                >OK</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </template>
     </v-simple-table>
   </v-card>
@@ -259,6 +274,7 @@ export default {
       dialogDelete: false,
       dialogDetails: false,
       dialogEdit: false,
+      dialogSuccess: false,
       itemDelete: Object,
       itemEdit: Object,
       menu1: false,
@@ -307,18 +323,29 @@ export default {
     deleteUsers(payload) {
       this.$store.dispatch("deleteUsers", payload);
       this.dialogDelete = false;
+      this.dialogSuccess = true;
     },
     viewEdit(item) {
       this.dialogEdit = true;
       this.itemEdit = Object.assign({}, item);
-      var CryptoJS = require('crypto-js');
-      var bytes = CryptoJS.AES.decrypt(this.itemEdit.password, 'secret key 123');
+      var CryptoJS = require("crypto-js");
+      var bytes = CryptoJS.AES.decrypt(
+        this.itemEdit.password,
+        "secret key 123"
+      );
       var originaltext = bytes.toString(CryptoJS.enc.Utf8);
       this.itemEdit.password = originaltext;
     },
     editUsers(payload) {
-      this.$store.dispatch("editUsers", payload);
       this.dialogEdit = false;
+      var CryptoJS = require("crypto-js");
+      var ciphertext = CryptoJS.AES.encrypt(
+        payload.password,
+        "secret key 123"
+      ).toString();
+      payload.password = ciphertext;
+      this.$store.dispatch("editUsers", payload);
+      this.dialogSuccess = true;
     },
   },
   computed: {

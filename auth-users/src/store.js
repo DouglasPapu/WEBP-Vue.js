@@ -96,6 +96,24 @@ export default new Vuex.Store({
                 });
             });
         },
+        editDependency(state, payload){
+            try{
+                db.collection("dependencies").get().then(ap => {
+                    ap.forEach(doc => {
+                        if(doc.data().id === payload.id){
+                            db.collection("dependencies").doc(doc.id).update(payload);
+                        }
+                    })
+                });
+
+                let depNew = state.dependencies.find(us => us.id === payload.id);
+                let index = state.dependencies.indexOf(depNew);
+                state.dependencies[index] = payload;
+
+            }catch(error){
+                console.log(error);
+            }
+        },
         deleteUsers(state, payload){
             try{
                 /* Code that delete a user from firebase */
@@ -121,7 +139,11 @@ export default new Vuex.Store({
                     });
                 });
                 /* Methods delete a specific user and remove him from all linked dependecies */
-                state.users.splice(payload,1);
+                state.users.forEach((usr, index) => {
+                        if(usr.id === payload.id){
+                             state.users.splice(index, 1);
+                        }
+                 });
                 state.dependencies.forEach(dep => {
                      if(dep.users.includes(payload)){
                         dep.users.splice(payload, 1);
@@ -133,6 +155,25 @@ export default new Vuex.Store({
 
             }catch(error){
                 console.log(error);
+            }
+        },
+        deleteDependency(state, payload){
+            if(payload.users.length <= 0){
+               
+                db.collection("dependencies").get().then(up => {
+                    up.forEach(doc => {
+                        if (doc.data().id === payload.id){
+                             db.collection("dependencies").doc(doc.id).delete();
+                        }
+                    });
+                });
+
+                 state.dependencies.forEach((dep, index) => {
+                        if(dep.id === payload.id){
+                             state.dependencies.splice(index, 1);
+                        }
+                 });
+                
             }
         },
     },
@@ -149,5 +190,11 @@ export default new Vuex.Store({
          editUsers({commit}, payload){
             commit("editUsers", payload);
          },
+         editDependency({commit}, payload){
+            commit("editDependency", payload);
+         },
+          deleteDependency(state, payload){
+            this.commit("deleteDependency", payload);
+          },
     },
 });
