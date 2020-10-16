@@ -14,8 +14,20 @@ export default new Vuex.Store({
         addToUsers(state,payload){
             try{
                 payload.id=((state.users.length) - 1) + 1; //cambiarlo
-                state.users.push(payload);
                 db.collection('users').add(payload);
+
+                //Actualizar ID.
+
+                db.collection("users").get().then(up => {
+                    up.forEach(doc => {
+                        if(doc.data().id === payload.id){
+                            payload.id = doc.id;
+                            db.collection("users").doc(doc.id).update(payload);
+                            state.users.push(payload);
+                        }
+                    });
+                });
+
 
                 //Agrega el usuario a la lista de usuarios de la dependencia correspondiente. En el store.
                 state.dependencies.forEach(dep => {
@@ -39,9 +51,20 @@ export default new Vuex.Store({
         },
         addToDependencies(state,payload){
             try{
-                payload.id=((state.dependencies.length) - 1) + 1;
-                state.dependencies.push(payload);
+                payload.id=((state.dependencies.length) - 1) + 1;                
                 db.collection('dependencies').add(payload);
+
+                 db.collection("dependencies").get().then(up => {
+                    up.forEach(doc => {
+                        if(doc.data().id === payload.id){
+                            payload.id = doc.id;
+                            db.collection("dependencies").doc(doc.id).update(payload);
+                            state.dependencies.push(payload);
+                        }
+                    });
+                });
+
+
             }catch(error){
                 console.log(error);
             }
