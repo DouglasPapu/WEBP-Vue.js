@@ -1,13 +1,34 @@
 <template>
   <v-card width="1300" shaped elevation="17" class="mx-auto mt-9">
     <v-card-title>
-      <v-text-field
-        v-model="search"
-        append-icon="search"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
+      <v-select
+        v-model="filter"
+        :items="items"
+        attach
+        chips
+        label="Filter by: "
+      >
+        <template v-slot:selection="data">
+          <v-chip
+            :key="JSON.stringify(data.item)"
+            v-bind="data.attrs"
+            :input-value="data.selected"
+            :disabled="data.disabled"
+            @click:close="data.parent.selectItem(data.item)"
+          >
+            <v-avatar
+              class="accent white--text"
+              left
+              v-text="data.item.slice(0, 1).toUpperCase()"
+            ></v-avatar>
+            {{ data.item }}
+          </v-chip>
+        </template>
+      </v-select>
+      <v-spacer></v-spacer>
+      <v-text-field v-model="search" label="Search" single-line hide-details>
+      </v-text-field>
+      <v-icon @click="searchUsers()">search</v-icon>
     </v-card-title>
     <v-simple-table height="350px">
       <template v-slot:default>
@@ -260,21 +281,122 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <!-- Dialog to show error on search -->
+        <v-dialog v-model="dialogError" max-width="500px">
+          <v-card>
+            <v-card-title class="headline justify-center"
+              >An error has occurred. Check the filter!</v-card-title
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="dialogError = false"
+                >OK</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <!-- Dialog to show results from search! -->
+        <v-dialog v-model="dialogSearch" max-width="1200px">
+          <v-card>
+            <v-card-title class="headline justify-center"
+              >Results table!</v-card-title
+            >
+
+            <v-simple-table height="350px">
+              <thead>
+                <tr>
+                  <th class="text-center">Name</th>
+                  <th class="text-center">Lastname</th>
+                  <th class="text-center">Email</th>
+                  <th class="text-center">Initial Date</th>
+                  <th class="text-center">Final Date</th>
+                  <th class="text-center">Dependency</th>
+                  <th class="text-center">Active</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in results" :key="index">
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.lastname }}</td>
+                  <td>{{ item.email }}</td>
+                  <td>{{ item.initDate }}</td>
+                  <td>{{ item.finalDate }}</td>
+                  <td>
+                    {{
+                      dependencies.find((dep) => dep.id === item.dependency)
+                        .name
+                    }}
+                  </td>
+                  <td>
+                    <v-icon :color="item.active ? 'green darken-2' : 'red'">{{
+                      item.active ? "how_to_reg" : "unpublished"
+                    }}</v-icon>
+                  </td>
+                </tr>
+              </tbody></v-simple-table
+            >
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="dialogSearch = false"
+                >OK</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </template>
     </v-simple-table>
+    <!-- Loader -->
+    <v-dialog v-model="dialogLoader" hide-overlay persistent width="300">
+      <v-card color="primary" dark>
+        <v-card-text>
+          Please stand by. Looking in the database.
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <!-- Dialog to show not founds results -->
+    <v-dialog v-model="dialogEmptyResults" max-width="500px">
+      <v-card>
+        <v-card-title class="headline justify-center"
+          >No results found.</v-card-title
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialogEmptyResults = false"
+            >OK</v-btn
+          >
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
+//import { db } from "../main";
 export default {
   data() {
     return {
+      items: ["name", "dependency"],
       itemView: Object,
+      filter: "",
       search: "",
+      results: [],
+      dialogLoader: false,
       dialogDelete: false,
       dialogDetails: false,
       dialogEdit: false,
       dialogSuccess: false,
+      dialogError: false,
+      dialogSearch: false,
+      dialogEmptyResults: false,
       itemDelete: Object,
       itemEdit: Object,
       menu1: false,
@@ -304,6 +426,13 @@ export default {
         (dependency) => !!dependency || "Dependency is required",
       ],
     };
+  },
+  watch: {
+    dialogLoader(val) {
+      if (!val) return;
+
+      setTimeout(() => (this.dialogLoader = false), 4000);
+    },
   },
   methods: {
     closeDelete() {
@@ -347,7 +476,40 @@ export default {
       this.$store.dispatch("editUsers", payload);
       this.dialogSuccess = true;
     },
+    searchUsers() {
+      this.results = [];
+      this.dialogEmptyResults = false;
+      this.dialogError = false;
+      this.dialogSearch = false;
+
+      if (this.filter === "name") {
+        this.$store.state.users.forEach((up) => {
+          if (up.name === this.search) {
+            this.results.push(up);
+          }
+        });
+        if (this.results.length <= 0) {
+          this.dialogEmptyResults = true;
+        } else {
+          this.dialogSearch = true;
+        }
+      } else if (this.filter === "dependency") {
+        this.$store.state.dependencies.forEach((up) => {
+          if (up.name === this.search) {
+            this.results = up.users;
+          }
+        });
+        if (this.results.length <= 0) {
+          this.dialogEmptyResults = true;
+        } else {
+          this.dialogSearch = true;
+        }
+      } else if (this.filter === "") {
+        this.dialogError = true;
+      }
+    },
   },
+
   computed: {
     users() {
       return this.$store.state.users;

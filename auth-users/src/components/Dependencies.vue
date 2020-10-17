@@ -1,6 +1,6 @@
 <template>
   <v-card width="1000" shaped elevation="17" class="mx-auto mt-9">
-    <v-card-title>
+    <!--  <v-card-title>
       <v-text-field
         v-model="search"
         append-icon="search"
@@ -8,7 +8,7 @@
         single-line
         hide-details
       ></v-text-field>
-    </v-card-title>
+    </v-card-title> -->
     <v-simple-table>
       <template v-slot:default>
         <thead>
@@ -313,6 +313,20 @@ export default {
       dialogSuccess: false,
       dialogDeleteDependency: false,
       dialogErrorDelete: false,
+      nameRules: [
+        (name) => !!name || "Name is required",
+        (name) => name.length >= 3 || "Name must be at least 3 characters",
+      ],
+      coordinatorRules: [
+        (coordinator) => !!coordinator || "Coordinator is required",
+        (coordinator) =>
+          coordinator.length >= 3 ||
+          "Coordinator must be at least 3 characters",
+      ],
+      locationRules: [(location) => !!location || "location is required"],
+      usersRules: [
+        (user) => !!user || "Users are required. Must be at least 1",
+      ],
     };
   },
   methods: {
