@@ -4,34 +4,36 @@
       <v-card width="500" shaped elevation="17" flat class="mx-auto mt-9">
         <v-card-title class="justify-center">Join Free</v-card-title>
         <v-card-subtitle class="justify-center">welcome</v-card-subtitle>
-        <v-card-text>
-          <v-text-field
-            required
-            v-model="itemUser.email"
-            label="Email"
-            :rules="emailRules"
-            prepend-icon="account_circle"
-          />
-          <v-text-field
-            label="Password"
-            v-model="itemUser.password"
-            :type="showPassword ? 'text' : 'password'"
-            prepend-icon="lock"
-            :append-icon="showPassword ? 'visibility' : 'visibility_off'"
-            @click:append="showPassword = !showPassword"
-            :rules="passwordRules"
-            required
-          />
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions class="justify-center">
-          <v-btn color="primary" @click="verifyLogin()"
-            ><v-icon left>login</v-icon>Login</v-btn
-          >
-        </v-card-actions>
-        <v-card-actions class="justify-center">
-          <v-btn to="/user" text>Register</v-btn>
-        </v-card-actions>
+        <v-form v-model="isValid">
+          <v-card-text>
+            <v-text-field
+              required
+              v-model="itemUser.email"
+              label="Email"
+              :rules="emailRules"
+              prepend-icon="account_circle"
+            />
+            <v-text-field
+              label="Password"
+              v-model="itemUser.password"
+              :type="showPassword ? 'text' : 'password'"
+              prepend-icon="lock"
+              :append-icon="showPassword ? 'visibility' : 'visibility_off'"
+              @click:append="showPassword = !showPassword"
+              :rules="passwordRules"
+              required
+            />
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions class="justify-center">
+            <v-btn color="primary" :disabled="!isValid" @click="verifyLogin()"
+              ><v-icon left>login</v-icon>Login</v-btn
+            >
+          </v-card-actions>
+          <v-card-actions class="justify-center">
+            <v-btn to="/user" text>Register</v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card>
       <!-- Loader -->
       <v-dialog v-model="dialogLoader" hide-overlay persistent width="300">
@@ -84,6 +86,7 @@ export default {
       dialogErrorPassword: false,
       dialogLoader: false,
       showPassword: false,
+      isValid: true,
       itemUser: {
         email: "",
         password: "",

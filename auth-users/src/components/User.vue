@@ -4,7 +4,7 @@
     <v-card-subtitle class="justify-center"
       >Register a new user</v-card-subtitle
     >
-    <v-form>
+    <v-form v-model="isValid">
       <v-container>
         <v-row>
           <v-col cols="12" md="6">
@@ -66,6 +66,7 @@
                   prepend-icon="event"
                   readonly
                   v-on="on"
+                  required
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -73,6 +74,7 @@
                 v-model="user.initDate"
                 no-title
                 scrollable
+                required
               >
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="menu1 = false">Cancel</v-btn>
@@ -102,6 +104,7 @@
                   prepend-icon="event"
                   readonly
                   v-on="on"
+                  required
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -109,6 +112,7 @@
                 v-model="user.finalDate"
                 no-title
                 scrollable
+                required
               >
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="menu2 = false">Cancel</v-btn>
@@ -133,6 +137,7 @@
               prepend-icon="touch_app"
               :rules="dependencyRules"
               single-line
+              required
             ></v-select>
           </v-col>
 
@@ -144,16 +149,33 @@
               :value="user.active"
               prepend-icon="check_circle"
               hide-details
+              required
             ></v-switch>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <v-btn class="primary" @click="addToUsers">Register</v-btn>
+            <v-btn :disabled="!isValid" class="primary" @click="addToUsers"
+              >Register</v-btn
+            >
           </v-col>
         </v-row>
       </v-container>
     </v-form>
+
+    <!-- Show user has been added! -->
+    <v-dialog v-model="dialogUserAdded" max-width="500px">
+      <v-card>
+        <v-card-title class="headline"> User added successfully!</v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialogUserAdded = false"
+            >OK</v-btn
+          >
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -172,6 +194,8 @@ export default {
         dependency: "",
         active: false,
       },
+      dialogUserAdded: false,
+      isValid: true,
       menu1: false,
       menu2: false,
       nameRules: [
@@ -220,11 +244,16 @@ export default {
       };
     },
     addToUsers() {
-      var CryptoJS = require('crypto-js');
-      var ciphertext = CryptoJS.AES.encrypt(this.user.password, 'secret key 123').toString();
+      this.dialogUserAdded = false;
+      var CryptoJS = require("crypto-js");
+      var ciphertext = CryptoJS.AES.encrypt(
+        this.user.password,
+        "secret key 123"
+      ).toString();
       this.user.password = ciphertext;
       this.$store.dispatch("addToUsers", this.user);
       this.refresh();
+      this.dialogUserAdded = true;
     },
   },
 };
