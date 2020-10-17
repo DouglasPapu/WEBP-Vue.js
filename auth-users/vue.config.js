@@ -1,3 +1,5 @@
 module.exports = {
-    publicPath: '/auth-users/'
+  publicPath: process.env.NODE_ENV === 'production'
+  ? '/WEBP-Vue.js/'
+  : '/'
   }
